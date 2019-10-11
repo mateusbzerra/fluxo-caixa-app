@@ -5,68 +5,44 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Operation = use('App/Models/Operation');
-/**
- * Resourceful controller for interacting with operations
- */
+
 class OperationController {
-  /**
-   * Show a list of all operations.
-   * GET operations
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index({ request, response }) {
+  async index({ request, response, params }) {
+    const { month } = request.all();
     const operations = await Operation.all();
-    return operations;
+    return {
+      operations,
+      month
+    };
   }
 
-  /**
-   * Create/save a new operation.
-   * POST operations
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store({ request, response }) {
-    const data = request.only(['description', 'value', 'incoming', 'type']);
-    data.value = data.value * 1000;
+  async store({ request, response, params }) {
+    const data = request.only([
+      'description',
+      'value',
+      'date',
+      'incoming',
+      'type'
+    ]);
+    let newValue = data.value;
+    if (typeof newValue === 'string') {
+      newValue = newValue.replace(',', '.');
+    }
+    newValue = newValue * 1000;
+    data.value = newValue;
     const operation = await Operation.create(data);
     return operation;
   }
 
-  /**
-   * Display a single operation.
-   * GET operations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show({ params, request, response, view }) {}
+  async show({ params, request, response, view }) {
+    const { id } = params;
 
-  /**
-   * Update operation details.
-   * PUT or PATCH operations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
+    const operation = await Operation.find(id).first();
+    return operation;
+  }
+
   async update({ params, request, response }) {}
 
-  /**
-   * Delete a operation with id.
-   * DELETE operations/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy({ params, request, response }) {}
 }
 

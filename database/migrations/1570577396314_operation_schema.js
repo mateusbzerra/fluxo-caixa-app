@@ -9,6 +9,7 @@ class OperationSchema extends Schema {
       table.increments();
       table.string('description', 255).notNullable();
       table.integer('value').notNullable();
+      table.date('date').notNullable();
       table.boolean('incoming').defaultTo(false);
       table.integer('type').notNullable(); // cartao, dinheiro | operacional, mercadoria, funcionario
       table.timestamps();

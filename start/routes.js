@@ -26,4 +26,5 @@ Route.post('/login', 'AuthController.login');
 Route.resource('/operations', 'OperationController')
   .apiOnly()
   .middleware('auth');
+
 Route.post('/login', 'AuthController.login');
