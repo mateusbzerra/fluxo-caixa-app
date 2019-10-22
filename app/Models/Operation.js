@@ -5,23 +5,25 @@ const Model = use('Model');
 
 class Operation extends Model {
   static get computed() {
-    return ['type_name', 'formated_value'];
+    return ['type_name', 'formated_value', 'incoming_total'];
   }
 
   getTypeName({ type }) {
     switch (type) {
       case 1:
-        return 'cartão de crédito';
+        return 'Dinheiro';
       case 2:
-        return 'cartão de débito';
+        return 'Cartão de Crédito';
       case 3:
-        return 'operacional';
+        return 'Cartão de Débito';
       case 4:
-        return 'mercadoria';
+        return 'Operacional';
       case 5:
-        return 'funcionario';
+        return 'Mercadoria';
+      case 6:
+        return 'Funcionário';
       default:
-        return 'inválido';
+        return 'Inválido';
     }
   }
   getFormatedValue({ value }) {

@@ -8,11 +8,30 @@ const Operation = use('App/Models/Operation');
 
 class OperationController {
   async index({ request, response, params }) {
-    const { month } = request.all();
-    const operations = await Operation.all();
+    const query = request.all();
+    let month = Number(new Date().getMonth() + 1);
+    if (query.month) {
+      month = Number(query.month);
+    }
+    const operations = await Operation.query()
+      .whereRaw('EXTRACT(MONTH FROM date) = ?', [month])
+      .fetch();
+    const [{ incoming }] = await Operation.query()
+      .whereRaw('EXTRACT(MONTH FROM date) = ?', [month])
+      .andWhere({ incoming: true })
+      .sum('value as incoming');
+    const [{ outcoming }] = await Operation.query()
+      .whereRaw('EXTRACT(MONTH FROM date) = ?', [month])
+      .andWhere({ incoming: false })
+      .sum('value as outcoming');
+
     return {
       operations,
-      month
+      month,
+      balance: {
+        incoming: Number(incoming),
+        outcoming: Number(outcoming)
+      }
     };
   }
 
