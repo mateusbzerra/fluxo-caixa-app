@@ -20,11 +20,13 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' };
 });
 
-Route.post('/signup', 'AuthController.signup');
-Route.post('/login', 'AuthController.login');
+Route.group(() => {
+  Route.post('/signup', 'AuthController.signup');
+  Route.post('/login', 'AuthController.login');
 
-Route.resource('/operations', 'OperationController')
-  .apiOnly()
-  .middleware('auth');
+  Route.resource('/operations', 'OperationController')
+    .apiOnly()
+    .middleware('auth');
 
-Route.post('/login', 'AuthController.login');
+  Route.post('/login', 'AuthController.login');
+}).middleware('auth2');
