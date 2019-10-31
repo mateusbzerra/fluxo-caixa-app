@@ -18,6 +18,7 @@ export default function Login({ navigation }) {
 
   useEffect(() => {
     async function verifyToken() {
+      //AsyncStorage.clear();
       const token = await AsyncStorage.getItem('token');
       console.log('token', token);
       if (token) {
@@ -28,11 +29,16 @@ export default function Login({ navigation }) {
   }, []);
 
   async function handleSubmit() {
-    if (cpf.length > 12 && password) {
-      const response = await api.post('/login', { cpf, password });
-      const { token } = response.data;
-      await AsyncStorage.setItem('token', token);
-      navigation.navigate('List');
+    if (cpf.length > 10 && password) {
+      try {
+        const response = await api.post('/login', { cpf, password });
+        console.log(response.data);
+        const { token } = response.data;
+        await AsyncStorage.setItem('token', token);
+        navigation.navigate('List');
+      } catch (err) {
+        console.log(err.response);
+      }
     }
   }
 

@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 const api = axios.create({
   baseURL: 'http://localhost:3333'
+  //baseURL: '192.168.0.13:3333'
 });
 
 api.interceptors.request.use(
@@ -11,6 +12,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    config.headers.apikey = '123';
     return config;
   },
   function(error) {
