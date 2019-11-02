@@ -6,13 +6,15 @@ import { withNavigation } from 'react-navigation';
 
 // import { Container } from './styles';
 
-function Header({ navigation }) {
+function Header({ navigation, handleConfig }) {
   return (
     <View style={styles.header}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleConfig}>
         <Icon name="cog" color="#fff" size={20}></Icon>
       </TouchableOpacity>
-      <Text style={styles.headerTitle}>Redes Poty</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('List')}>
+        <Text style={styles.headerTitle}>Redes Poty</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Add')}>
         <Icon name="plus" color="#fff" size={20}></Icon>
       </TouchableOpacity>

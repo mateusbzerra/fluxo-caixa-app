@@ -3,11 +3,14 @@ import { View, Text, StyleSheet, FlatList, StatusBar } from 'react-native';
 import Card from '../components/Card';
 import api from '../services/api';
 import Header from '../components/Header';
+import SelectPeriod from '../components/SelectPeriod';
 
 export default function List({ navigation }) {
   const [operations, setOperations] = useState([]);
   const [balance, setBalance] = useState('');
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState(Number(new Date().getMonth() + 1));
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [visible, setVisible] = useState(false);
   const monthNames = [
     'Janeiro',
     'Fevereiro',
@@ -22,22 +25,31 @@ export default function List({ navigation }) {
     'Novembro',
     'Dezembro'
   ];
+  async function getOperations() {
+    const response = await api.get(`operations?month=${month}&year=${year}`);
+    const {
+      operations: responseData,
+      month: reqMonth,
+      balance
+    } = response.data;
+    console.log('reqMonth', reqMonth);
+    setOperations(responseData);
+    setMonth(reqMonth);
+    setBalance(balance);
+  }
   useEffect(() => {
-    async function getOperations() {
-      const response = await api.get('operations');
-      const { operations: responseData, month, balance } = response.data;
-      setOperations(responseData);
-      setMonth(month);
-      setBalance(balance);
-    }
     getOperations();
   }, []);
 
+  useEffect(() => {
+    getOperations();
+  }, [visible]);
+
   return (
-    <View>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content"></StatusBar>
-      <Header></Header>
-      <Text style={styles.title}>Balanço Mensal - {monthNames[month]}</Text>
+      <Header handleConfig={() => setVisible(true)}></Header>
+      <Text style={styles.title}>Balanço Mensal - {monthNames[month - 1]}</Text>
       <View style={styles.balanceContainer}>
         <View style={[styles.balanceCard, styles.incoming]}>
           <Text style={styles.cardTitle}>Receitas</Text>
@@ -57,10 +69,23 @@ export default function List({ navigation }) {
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => <Card data={item}></Card>}
       ></FlatList>
+      <SelectPeriod
+        handleClose={(selectedMonth, selectedYear) => {
+          console.log('selectedMonth', selectedMonth);
+          setMonth(selectedMonth);
+          setYear(selectedYear);
+          setVisible(!visible);
+          getOperations();
+        }}
+        visible={visible}
+      ></SelectPeriod>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   title: {
     textAlign: 'center',
     alignItems: 'center',
