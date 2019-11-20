@@ -1,0 +1,11 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mateusbzerra/cash-balance-app.git",
+  "author": "Mateus Bezerra <mateusbzerra@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./backend/server.js"
+  }
+}
