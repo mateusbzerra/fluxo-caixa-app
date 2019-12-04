@@ -1,18 +1,18 @@
-import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import axios from "axios";
+import { AsyncStorage } from "react-native";
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.13:3333'
+  baseURL: "https://poty-api.herokuapp.com"
   //baseURL: '192.168.0.13:3333'
 });
 
 api.interceptors.request.use(
   async function(config) {
-    const token = await AsyncStorage.getItem('token');
+    const token = await AsyncStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    config.headers.apikey = '123';
+    config.headers.apikey = "A?D(G-KaPdSgVkYp3s6v9y$B&E)H@MbQ";
     return config;
   },
   function(error) {

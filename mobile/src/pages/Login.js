@@ -17,6 +17,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
+    //AsyncStorage.clear();
     async function verifyToken() {
       //AsyncStorage.clear();
       const token = await AsyncStorage.getItem('token');
