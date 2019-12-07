@@ -132,7 +132,8 @@ function Add({ values, handleSubmit, errors, setFieldValue, isSubmitting }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#fff'
   },
   content: {
     marginHorizontal: 15,

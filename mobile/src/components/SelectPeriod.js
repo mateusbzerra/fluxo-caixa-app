@@ -3,7 +3,7 @@ import {
   Modal,
   View,
   SafeAreaView,
-  ScrollView,
+  AsyncStorage,
   TouchableOpacity,
   Text,
   Picker,
@@ -26,7 +26,7 @@ const months = [
   '12'
 ];
 const years = ['2019', '2020', '2021'];
-export default function SelectModal({ handleClose, visible }) {
+export default function SelectModal({ handleClose, visible, handleLogout }) {
   const [month, setMonth] = useState(String(new Date().getMonth() + 1));
   const [year, setYear] = useState(new Date().getFullYear());
   return (
@@ -76,12 +76,14 @@ export default function SelectModal({ handleClose, visible }) {
           </View>
           <TouchableOpacity
             onPress={() => {
-              console.log('mês', month);
               handleClose(month, year);
             }}
             style={styles.button}
           >
             <Text style={styles.buttonText}>Fechar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout} style={styles.button}>
+            <Text style={styles.buttonText}>Sair</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 10
   },
   buttonText: {
     color: '#fff',
