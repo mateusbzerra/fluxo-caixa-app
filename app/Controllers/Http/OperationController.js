@@ -77,13 +77,7 @@ class OperationController {
 
   async update({ params, request, response }) {
     const { id } = request.params;
-    const data = request.only([
-      "description",
-      "value",
-      "date",
-      "incoming",
-      "type"
-    ]);
+    const data = request.all();
     let newValue = data.value;
     if (typeof newValue === "string") {
       newValue = newValue.replace(",", ".");
