@@ -78,12 +78,14 @@ class OperationController {
   async update({ params, request, response }) {
     const { id } = request.params;
     const data = request.all();
-    let newValue = data.value;
-    if (typeof newValue === "string") {
-      newValue = newValue.replace(",", ".");
+    if (data.value) {
+      let newValue = data.value;
+      if (typeof newValue === "string") {
+        newValue = newValue.replace(",", ".");
+      }
+      newValue = newValue * 1000;
+      data.value = newValue;
     }
-    newValue = newValue * 1000;
-    data.value = newValue;
 
     const operation = await Operation.find(id);
     operation.merge(data);
