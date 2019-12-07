@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Operation = use('App/Models/Operation');
+const Operation = use("App/Models/Operation");
 
 class OperationController {
   async index({ request, response, params }) {
@@ -19,24 +19,24 @@ class OperationController {
     }
     const operations = await Operation.query()
       .whereRaw(
-        'EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?',
+        "EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?",
         [month, year]
       )
       .fetch();
     const [{ incoming }] = await Operation.query()
       .whereRaw(
-        'EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?',
+        "EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?",
         [month, year]
       )
       .andWhere({ incoming: true })
-      .sum('value as incoming');
+      .sum("value as incoming");
     const [{ outcoming }] = await Operation.query()
       .whereRaw(
-        'EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?',
+        "EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?",
         [month, year]
       )
       .andWhere({ incoming: false })
-      .sum('value as outcoming');
+      .sum("value as outcoming");
 
     return {
       operations,
@@ -51,15 +51,15 @@ class OperationController {
 
   async store({ request, response, params }) {
     const data = request.only([
-      'description',
-      'value',
-      'date',
-      'incoming',
-      'type'
+      "description",
+      "value",
+      "date",
+      "incoming",
+      "type"
     ]);
     let newValue = data.value;
-    if (typeof newValue === 'string') {
-      newValue = newValue.replace(',', '.');
+    if (typeof newValue === "string") {
+      newValue = newValue.replace(",", ".");
     }
     newValue = newValue * 1000;
     data.value = newValue;
@@ -75,7 +75,27 @@ class OperationController {
     return operation;
   }
 
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    const { id } = request.params;
+    const data = request.only([
+      "description",
+      "value",
+      "date",
+      "incoming",
+      "type"
+    ]);
+    let newValue = data.value;
+    if (typeof newValue === "string") {
+      newValue = newValue.replace(",", ".");
+    }
+    newValue = newValue * 1000;
+    data.value = newValue;
+
+    const operation = await Operation.find(id);
+    operation.merge(data);
+    await operation.save();
+    return operation;
+  }
 
   async destroy({ params, request, response }) {}
 }
