@@ -4,10 +4,10 @@
     "slug": "potyapp",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": ["android", "web"],
     "android": {
       "package": "com.mateusbezerra.poty",
-      "versionCode": 3
+      "versionCode": 4
     },
     "version": "1.0.0",
     "orientation": "portrait",
