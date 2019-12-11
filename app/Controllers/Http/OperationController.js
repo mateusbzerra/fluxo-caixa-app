@@ -22,6 +22,7 @@ class OperationController {
         "EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?",
         [month, year]
       )
+      .orderBy("date", "desc")
       .fetch();
     const [{ incoming }] = await Operation.query()
       .whereRaw(
