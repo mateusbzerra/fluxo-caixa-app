@@ -6,22 +6,22 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
 
 import api from '../services/api';
 import logo from '../assets/logo.png';
 
 export default function Login({ navigation }) {
+  const [loading, setLoading] = useState(false);
   const [cpf, setCpf] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     //AsyncStorage.clear();
     async function verifyToken() {
-      //AsyncStorage.clear();
       const token = await AsyncStorage.getItem('token');
-      console.log('token', token);
       if (token) {
         navigation.navigate('List');
       }
@@ -31,14 +31,16 @@ export default function Login({ navigation }) {
 
   async function handleSubmit() {
     if (cpf.length > 10 && password) {
+      setLoading(true);
       try {
         const response = await api.post('/login', { cpf, password });
-        console.log(response.data);
         const { token } = response.data;
         await AsyncStorage.setItem('token', token);
         navigation.navigate('List');
       } catch (err) {
-        console.log(err.response);
+        alert('CPF ou senha inválidos');
+      } finally {
+        setLoading(false);
       }
     }
   }
@@ -65,9 +67,13 @@ export default function Login({ navigation }) {
           secureTextEntry
           placeholder="Informe a senha"
         ></TextInput>
-        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator color="#444" size="large"></ActivityIndicator>
+        ) : (
+          <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

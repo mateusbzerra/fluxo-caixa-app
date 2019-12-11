@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   rightContent: {
     flex: 1,
     flexDirection: 'column',
-    borderLeftWidth: 0.2,
+    borderLeftWidth: StyleSheet.hairlineWidth,
     borderLeftColor: '#888',
     paddingLeft: 10
   },

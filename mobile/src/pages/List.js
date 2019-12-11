@@ -33,15 +33,12 @@ export default function List({ navigation }) {
     'Dezembro'
   ];
   async function getOperations() {
-    console.log('req', year);
     const response = await api.get(`operations?month=${month}&year=${year}`);
-    console.log('response', response);
     const {
       operations: responseData,
       month: reqMonth,
       balance
     } = response.data;
-    console.log('reqMonth', reqMonth);
     setOperations(responseData);
     setMonth(reqMonth);
     setBalance(balance);
@@ -80,7 +77,6 @@ export default function List({ navigation }) {
       ></FlatList>
       <SelectPeriod
         handleClose={(selectedMonth, selectedYear) => {
-          console.log('selectedMonth', selectedMonth);
           setMonth(selectedMonth);
           setYear(selectedYear);
           setVisible(!visible);

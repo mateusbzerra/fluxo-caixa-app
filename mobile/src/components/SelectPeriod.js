@@ -47,9 +47,8 @@ export default function SelectModal({ handleClose, visible, handleLogout }) {
               <Picker
                 selectedValue={month}
                 style={{ width: 120 }}
-                onValueChange={(itemValue, itemIndex) => {
+                onValueChange={itemValue => {
                   setMonth(itemValue);
-                  console.log(itemValue);
                 }}
               >
                 {months.map((month, index) => (
