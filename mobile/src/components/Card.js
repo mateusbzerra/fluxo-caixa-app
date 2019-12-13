@@ -6,15 +6,17 @@ import moment from 'moment';
 
 export default function Card({ data }) {
   function formatDate(date) {
-    return moment(date).format('DD/MM');
+    return moment.utc(date).format('DD/MM');
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>{formatDate(data.created_at)}</Text>
+      <Text style={styles.date}>{formatDate(data.date)}</Text>
       <View style={styles.rightContent}>
         <View>
           <View style={styles.content}>
-            <Text style={styles.description}>{data.description}</Text>
+            <Text numberOfLines={2} style={styles.description}>
+              {data.description}
+            </Text>
             <Text style={[styles.value, data.incoming && styles.greenColor]}>
               {data.formated_value}
             </Text>
