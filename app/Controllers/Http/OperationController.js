@@ -22,7 +22,6 @@ class OperationController {
         "EXTRACT(MONTH FROM date) = ? AND EXTRACT(YEAR FROM date) = ?",
         [month, year]
       )
-      .orderBy("date", "desc")
       .fetch();
     const [{ incoming }] = await Operation.query()
       .whereRaw(
@@ -38,12 +37,25 @@ class OperationController {
       )
       .andWhere({ incoming: false })
       .sum("value as outcoming");
+    const previousMonth = Number(month - 1);
+    let previousYear = year;
+    if (Number(month) === 1) {
+      previousYear = year - 1;
+    }
+    const [{ previousIncoming }] = await Operation.query()
+      .where({ incoming: true })
+      .sum("value as previousIncoming");
+    const [{ previousOutcoming }] = await Operation.query()
+      .where({ incoming: false })
+      .sum("value as previousOutcoming");
 
     return {
       operations,
       month,
       year,
+
       balance: {
+        total: Number(previousIncoming - previousOutcoming), //+ Number(previousIncoming - previousOutcoming)Number(incoming),
         incoming: Number(incoming),
         outcoming: Number(outcoming)
       }
