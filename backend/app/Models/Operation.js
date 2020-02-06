@@ -5,7 +5,7 @@ const Model = use('Model');
 
 class Operation extends Model {
   static get computed() {
-    return ['type_name', 'formated_value', 'incoming_total'];
+    return ['type_name', 'formated_value'];
   }
 
   getTypeName({ type }) {
