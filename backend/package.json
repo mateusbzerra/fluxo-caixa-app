@@ -27,7 +27,7 @@
     "pg": "^7.12.1"
   },
   "engines": {
-    "node": "16.20.0"
+    "node": "16.20.2"
   },
   "devDependencies": {},
   "autoload": {
